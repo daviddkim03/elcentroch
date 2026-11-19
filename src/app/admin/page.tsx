@@ -58,7 +58,7 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-secondary">
+    <div className="min-h-screen bg-muted/40">
       <header className="flex items-center justify-between bg-ink px-6 py-4 text-ink-foreground">
         <Link href="/" className="font-serif font-bold">
           엘센트로 한인교회 · 관리자
@@ -111,7 +111,7 @@ function LoginForm() {
         if (error) return notify(error.message, true);
         if (mode === "up") notify("확인 이메일을 보냈습니다. 이메일을 확인해 주세요.");
       }}
-      className="mx-auto max-w-sm space-y-4 bg-card p-8 shadow"
+      className="mx-auto max-w-sm space-y-4 rounded-xl border bg-card p-8 shadow-sm"
     >
       <h1 className="text-2xl font-bold">{mode === "in" ? "관리자 로그인" : "관리자 계정 만들기"}</h1>
       <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -196,16 +196,16 @@ function SlideManager() {
         </div>
         <label className="cursor-pointer">
           <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => upload(e.target.files)} />
-          <span className="inline-flex h-10 items-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground">
+          <span className="inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground">
             {uploading ? "업로드 중..." : "+ 이미지 추가"}
           </span>
         </label>
       </div>
       <div className="mt-8 space-y-4">
         {slides.map((s, i) => (
-          <div key={s.id} className="grid gap-4 bg-card p-4 shadow-sm md:grid-cols-[200px_1fr_auto]">
+          <div key={s.id} className="grid gap-4 rounded-xl border bg-card p-4 shadow-sm md:grid-cols-[200px_1fr_auto]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={s.image_url} alt="" className="aspect-video w-full object-cover" />
+            <img src={s.image_url} alt="" className="aspect-video w-full rounded-lg object-cover" />
             <div className="grid gap-2 sm:grid-cols-2">
               <Input defaultValue={s.title_ko ?? ""} placeholder="제목 (한국어)" onBlur={(e) => update(s.id, { title_ko: e.target.value || null })} />
               <Input defaultValue={s.title_en ?? ""} placeholder="Title (English)" onBlur={(e) => update(s.id, { title_en: e.target.value || null })} />
