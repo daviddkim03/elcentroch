@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# El Centro Korean Church website
 
-## Getting Started
+Source code for https://elcentro.lovable.app, rebuilt outside Lovable with the same
+design: the navy + gold colors, fonts, layout, copy, 한국어 / EN toggle, hero slider,
+404 page and the `/admin` slide manager. Automated screenshot comparisons against the
+live Lovable site (every public page and the admin sign-in screen, at desktop, laptop,
+tablet and phone widths, in Korean and English, plus hover, scroll, menu and toast
+states) came out pixel-identical.
 
-First, run the development server:
+Stack: Next.js 15 (App Router, static export), React 19, Tailwind CSS v4,
+shadcn/ui components, lucide-react icons, sonner toasts, Supabase.
+
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build and deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build      # writes the static site to out/
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Every page is pre-rendered to plain HTML (`out/about.html` is served at `/about`), so `out/`
+can go on any static host with clean URLs: Vercel, Netlify, Cloudflare Pages, GitHub Pages
+or Firebase Hosting. On Vercel, just import the repo.
 
-## Learn More
+## Supabase (hero slides and admin)
 
-To learn more about Next.js, take a look at the following resources:
+The site uses the same Supabase project as the Lovable version, so slides you manage at
+`/admin` show up on the home page. `.env` holds its URL and publishable key; both are public
+by design (they ship in the browser bundle, and row-level security protects the data). If
+they are missing, the site still works and shows the three built-in slides.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+What the code expects in Supabase:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `hero_slides` table: `id`, `image_url`, `title_ko`, `title_en`, `subtitle_ko`, `subtitle_en`, `sort_order`
+- `hero` storage bucket for uploaded images
+- `has_role(_user_id, _role)` function, used to check that a signed-in user is an admin
 
-## Deploy on Vercel
+When you deploy to a new domain, add it under Supabase > Authentication > URL Configuration
+so admin sign-up emails link back to the right site.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/app/*/page.tsx`: one file per page, including its title and description
+- `src/app/admin/`: slide manager (sign in, upload, reorder, captions)
+- `src/app/not-found.tsx`, `src/app/error.tsx`: 404 and error pages
+- `src/components/`: header, footer, hero slider, page shell, shadcn `ui/` primitives
+- `src/lib/site.ts`: church info, navigation, built-in hero slides
+- `src/lib/i18n.tsx`: 한국어 / EN toggle (`t(ko, en)` in client components, `<T ko en />` elsewhere)
+- `src/lib/metadata.ts`: per-page title, description and social preview tags
+- `src/app/globals.css`: the color theme and the custom `eyebrow`, `hero-overlay`,
+  `animate-fadeup` and `animate-kenburns` utilities
+
+## Keeping the look identical
+
+- `lucide-react` is pinned to 1.25.0: later versions redraw some of the icons this site uses
+  (book-open, heart, map-pin, phone, sprout, trash-2).
+- Fonts are self-hosted from `@fontsource-variable/noto-sans-kr` and `noto-serif-kr`, the same
+  variable font files Google Fonts serves to the original.
+- The social preview image (`og:image` in `src/lib/metadata.ts`) is still hosted by Lovable.

@@ -1,9 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import { LuMapPin, LuPhone } from "react-icons/lu";
+import { MapPin, Phone } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useLang } from "@/lib/i18n";
 import { nav, site } from "@/lib/site";
+import { NavLink } from "./nav-link";
+
+// The HTML is pre-rendered at build time, so the year baked into it is the build
+// year. Show the visitor's current year once the page is running in the browser.
+function CurrentYear() {
+  const [year, setYear] = useState<number>();
+  useEffect(() => setYear(new Date().getFullYear()), []);
+  return <span suppressHydrationWarning>{year ?? new Date().getFullYear()}</span>;
+}
 
 export function SiteFooter() {
   const { t } = useLang();
@@ -16,11 +25,11 @@ export function SiteFooter() {
         </div>
         <div className="space-y-3 text-sm opacity-90">
           <p className="flex gap-2">
-            <LuMapPin className="h-4 w-4 shrink-0 text-gold" />
+            <MapPin className="h-4 w-4 shrink-0 text-gold" />
             {site.address}
           </p>
           <p className="flex gap-2">
-            <LuPhone className="h-4 w-4 shrink-0 text-gold" />
+            <Phone className="h-4 w-4 shrink-0 text-gold" />
             <a href={`tel:${site.phone}`}>{site.phone}</a>
           </p>
           <p>
@@ -29,21 +38,21 @@ export function SiteFooter() {
         </div>
         <div className="space-y-2 text-sm">
           {nav.map((n) => (
-            <Link
+            <NavLink
               key={n.to}
               href={n.to}
               className="block opacity-80 hover:text-gold hover:opacity-100"
             >
               {t(n.ko, n.en)}
-            </Link>
+            </NavLink>
           ))}
         </div>
       </div>
       <div className="border-t border-ink-foreground/10 py-6 text-center text-xs opacity-60">
-        © {new Date().getFullYear()} {site.nameEn}. All rights reserved. ·{" "}
-        <Link href="/admin" className="hover:text-gold">
+        © <CurrentYear /> {site.nameEn}. All rights reserved. ·{" "}
+        <NavLink href="/admin" className="hover:text-gold">
           Admin
-        </Link>
+        </NavLink>
       </div>
     </footer>
   );

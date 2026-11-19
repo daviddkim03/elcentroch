@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { LuMenu, LuX } from "react-icons/lu";
 import { useLang } from "@/lib/i18n";
 import { nav, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { NavLink } from "./nav-link";
 
 function LangToggle({ light }: { light: boolean }) {
   const { lang, setLang } = useLang();
@@ -36,7 +35,6 @@ function LangToggle({ light }: { light: boolean }) {
 
 export function SiteHeader({ transparent }: { transparent?: boolean }) {
   const { t } = useLang();
-  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -59,7 +57,7 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
       )}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex flex-col leading-tight">
+        <NavLink href="/" className="flex flex-col leading-tight">
           <span className="font-serif text-xl font-bold">
             {t(site.nameKo, site.nameEn)}
           </span>
@@ -71,40 +69,38 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
           >
             {t(site.nameEn, site.nameKo)}
           </span>
-        </Link>
+        </NavLink>
         <nav className="hidden items-center gap-9 lg:flex">
           {nav.map((n) => (
-            <Link
+            <NavLink
               key={n.to}
               href={n.to}
-              className={cn(
-                "text-[15px] font-medium transition-colors hover:text-gold",
-                pathname?.replace(/\/$/, "") === n.to && "text-gold"
-              )}
+              className="text-[15px] font-medium transition-colors hover:text-gold"
+              activeClassName="text-gold"
             >
               {t(n.ko, n.en)}
-            </Link>
+            </NavLink>
           ))}
           <LangToggle light={light} />
         </nav>
         <div className="flex items-center gap-3 lg:hidden">
           <LangToggle light={light} />
           <button onClick={() => setOpen(!open)} aria-label="Menu">
-            {open ? <LuX size={24} /> : <LuMenu size={24} />}
+            {open ? <X /> : <Menu />}
           </button>
         </div>
       </div>
       {open && (
         <nav className="border-t bg-background px-6 py-4 lg:hidden">
           {nav.map((n) => (
-            <Link
+            <NavLink
               key={n.to}
               href={n.to}
               onClick={() => setOpen(false)}
               className="block py-3 text-base font-medium"
             >
               {t(n.ko, n.en)}
-            </Link>
+            </NavLink>
           ))}
         </nav>
       )}

@@ -47,3 +47,8 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
 }
 
 export const useLang = () => useContext(LangContext);
+
+/** The Korean or English string for the current language; usable from server components. */
+export function T({ ko, en }: { ko: string; en: string }) {
+  return useLang().t(ko, en);
+}

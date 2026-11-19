@@ -1,7 +1,12 @@
-"use client";
-
 import { InfoCard, PageShell } from "@/components/page-shell";
+import { pageMetadata } from "@/lib/metadata";
 import { images } from "@/lib/site";
+
+export const metadata = pageMetadata({
+  title: "사역 | 엘센트로 한인교회",
+  description: "엘센트로 한인교회의 섬김과 선교 사역.",
+  ogDescription: "Ministries of El Centro Korean Church.",
+});
 
 export default function MinistryPage() {
   return (

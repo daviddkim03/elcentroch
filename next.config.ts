@@ -1,10 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Static export: the whole site is client-rendered (like the Lovable original),
-  // so it can be hosted anywhere (Vercel, Netlify, Cloudflare Pages, S3...).
+  // Static export: every page is pre-rendered to plain HTML at build time and
+  // the dynamic parts (hero slides, admin) talk to Supabase from the browser,
+  // so `out/` can be hosted on any static host.
   output: "export",
-  trailingSlash: true,
   images: { unoptimized: true },
 };
 

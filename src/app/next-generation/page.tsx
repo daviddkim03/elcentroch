@@ -1,7 +1,12 @@
-"use client";
-
 import { InfoCard, PageShell } from "@/components/page-shell";
+import { pageMetadata } from "@/lib/metadata";
 import { images } from "@/lib/site";
+
+export const metadata = pageMetadata({
+  title: "다음세대 | 엘센트로 한인교회",
+  description: "어린이와 청소년을 위한 다음세대 사역.",
+  ogDescription: "Children and youth ministry.",
+});
 
 export default function NextGenerationPage() {
   return (

@@ -1,8 +1,6 @@
-"use client";
-
-import { useLang } from "@/lib/i18n";
-import { SiteHeader } from "./site-header";
+import { T } from "@/lib/i18n";
 import { SiteFooter } from "./site-footer";
+import { SiteHeader } from "./site-header";
 
 export function PageShell({
   titleKo,
@@ -17,7 +15,6 @@ export function PageShell({
   image: string;
   children: React.ReactNode;
 }) {
-  const { t } = useLang();
   return (
     <div className="min-h-screen">
       <SiteHeader transparent />
@@ -28,7 +25,7 @@ export function PageShell({
         <div className="relative mx-auto w-full max-w-7xl px-6 pb-14 text-ink-foreground">
           <p className="eyebrow">{eyebrow}</p>
           <h1 className="mt-3 animate-fadeup text-4xl font-bold md:text-5xl">
-            {t(titleKo, titleEn)}
+            <T ko={titleKo} en={titleEn} />
           </h1>
         </div>
       </section>
@@ -49,11 +46,14 @@ export function InfoCard({
   ko: string;
   en: string;
 }) {
-  const { t } = useLang();
   return (
     <div className="border-t-2 border-gold bg-card p-8 shadow-sm">
-      <h3 className="text-xl font-bold">{t(titleKo, titleEn)}</h3>
-      <p className="mt-3 leading-relaxed text-muted-foreground">{t(ko, en)}</p>
+      <h3 className="text-xl font-bold">
+        <T ko={titleKo} en={titleEn} />
+      </h3>
+      <p className="mt-3 leading-relaxed text-muted-foreground">
+        <T ko={ko} en={en} />
+      </p>
     </div>
   );
 }

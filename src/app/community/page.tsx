@@ -1,7 +1,12 @@
-"use client";
-
 import { InfoCard, PageShell } from "@/components/page-shell";
+import { pageMetadata } from "@/lib/metadata";
 import { images } from "@/lib/site";
+
+export const metadata = pageMetadata({
+  title: "커뮤니티 | 엘센트로 한인교회",
+  description: "소그룹, 교제, 교회 소식.",
+  ogDescription: "Small groups, fellowship and church news.",
+});
 
 export default function CommunityPage() {
   return (

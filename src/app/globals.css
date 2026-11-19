@@ -37,8 +37,8 @@
 }
 
 @theme inline {
-  --font-sans: "Noto Sans KR", system-ui, sans-serif;
-  --font-serif: "Noto Serif KR", Georgia, serif;
+  --font-sans: "Noto Sans KR Variable", system-ui, sans-serif;
+  --font-serif: "Noto Serif KR Variable", Georgia, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -82,20 +82,20 @@
   }
 }
 
-.eyebrow {
+@utility eyebrow {
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--gold);
   font-size: 0.75rem;
   font-weight: 500;
 }
-.hero-overlay {
+@utility hero-overlay {
   background: var(--hero-overlay);
 }
-.animate-fadeup {
+@utility animate-fadeup {
   animation: fadeup 0.9s ease-out both;
 }
-.animate-kenburns {
+@utility animate-kenburns {
   animation: kenburns 8s ease-out forwards;
 }
 @keyframes kenburns {

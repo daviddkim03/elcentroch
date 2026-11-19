@@ -1,7 +1,7 @@
 "use client";
 
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { useLang } from "@/lib/i18n";
 import { defaultSlides } from "@/lib/site";
 import { useHeroSlides } from "@/lib/use-hero-slides";
@@ -56,7 +56,7 @@ export function HeroSlider() {
       {slides.length > 1 && (
         <div className="absolute inset-x-0 bottom-10 mx-auto flex max-w-7xl items-center gap-6 px-6 text-ink-foreground">
           <button onClick={() => go(-1)} aria-label="Previous">
-            <LuChevronLeft size={24} />
+            <ChevronLeft />
           </button>
           <div className="flex gap-2">
             {slides.map((sl, i) => (
@@ -72,7 +72,7 @@ export function HeroSlider() {
             ))}
           </div>
           <button onClick={() => go(1)} aria-label="Next">
-            <LuChevronRight size={24} />
+            <ChevronRight />
           </button>
           <span className="ml-auto font-serif text-sm">
             {String(cur + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
