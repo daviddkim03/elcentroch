@@ -1,44 +1,36 @@
-# El Centro Korean Church — website
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Rebuild of https://elcentro.lovable.app in Next.js 15 + Tailwind v4 + shadcn/ui (Neutral) + react-icons.
+## Getting Started
 
-## Run locally
+First, run the development server:
 
 ```bash
-npm install
-npm run dev        # http://localhost:3000
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Build / deploy
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-`npm run build` writes a static site to `out/` (it's `output: "export"`), so it can go on
-Vercel, Netlify, Cloudflare Pages or any static host. On Vercel, just import the repo.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Supabase
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-`.env.local` points at the same Supabase project the Lovable site uses, so the home-page
-hero slides and `/admin` (login, upload/reorder/caption slides) keep working:
+## Learn More
 
-```
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
-```
+To learn more about Next.js, take a look at the following resources:
 
-Add the same two variables in your host's environment settings. If they're missing the
-site still works and shows the three built-in slides.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-When you deploy to a new domain, add it under Supabase → Authentication → URL Configuration
-so admin sign-up emails redirect correctly.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Structure
+## Deploy on Vercel
 
-- `src/lib/site.ts`: church info, nav, default hero slides
-- `src/lib/i18n.tsx`: 한국어 / EN toggle (`t(ko, en)`)
-- `src/lib/theme.tsx`: light / dark mode
-- `src/components/`: header, footer, hero slider, page shell, shadcn `ui/` primitives
-- `src/app/*/page.tsx`: one file per page
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-## History
-
-- Commit 1 "Phase 1": faithful copy of the Lovable site
-- Commit 2 "Phase 2": UI improvements. See `CHANGES.md` for each change and how to revert it.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { LangProvider } from "@/lib/i18n";
-import { ThemeProvider, themeInitScript } from "@/lib/theme";
+// Same families and weights as the original Google Fonts link, self-hosted.
+// Imported here rather than from globals.css: each Korean weight is ~120
+// unicode-range @font-face rules, and inlining them all into one stylesheet
+// overflows webpack's CSS parser.
+import "@fontsource/noto-sans-kr/300.css";
 import "@fontsource/noto-sans-kr/400.css";
 import "@fontsource/noto-sans-kr/500.css";
 import "@fontsource/noto-sans-kr/700.css";
@@ -32,21 +36,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
-      <body className="antialiased">
-        <div id="top" />
-        <a
-          href="#main"
-          className="sr-only z-[100] rounded-md bg-primary px-4 py-2 text-primary-foreground focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
-        >
-          Skip to content
-        </a>
-        <ThemeProvider>
-          <LangProvider>{children}</LangProvider>
-        </ThemeProvider>
+    <html lang="ko">
+      <body>
+        <LangProvider>{children}</LangProvider>
       </body>
     </html>
   );
