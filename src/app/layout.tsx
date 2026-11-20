@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { withBasePath } from "@/lib/base-path";
 import { LangProvider } from "@/lib/i18n";
 import { ogImage } from "@/lib/metadata";
 // Self-hosted copies of the fonts the original loads from Google Fonts. Google
@@ -15,7 +16,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "엘센트로 한인교회 | El Centro Korean Church",
   description: "캘리포니아 엘센트로에 위치한 한인교회입니다. 주일예배 오전 9시.",
-  icons: { icon: { url: "/favicon.ico", type: "image/x-icon" } },
+  icons: { icon: { url: withBasePath("/favicon.ico"), type: "image/x-icon" } },
   openGraph: { type: "website", images: [ogImage] },
   twitter: { card: "summary_large_image", images: [ogImage] },
 };

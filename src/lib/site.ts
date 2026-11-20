@@ -1,3 +1,5 @@
+import { withBasePath } from "@/lib/base-path";
+
 export const site = {
   nameKo: "엘센트로 한인교회",
   nameEn: "El Centro Korean Church",
@@ -20,9 +22,9 @@ export const nav = [
 ];
 
 export const images = {
-  hero1: "/images/hero-1.jpg",
-  hero2: "/images/hero-2.jpg",
-  hero3: "/images/hero-3.jpg",
+  hero1: withBasePath("/images/hero-1.jpg"),
+  hero2: withBasePath("/images/hero-2.jpg"),
+  hero3: withBasePath("/images/hero-3.jpg"),
 };
 
 export type HeroSlide = {

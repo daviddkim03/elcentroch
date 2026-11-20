@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { withBasePath } from "@/lib/base-path";
 import type { HeroSlide } from "@/lib/site";
 import { supabase } from "@/lib/supabase";
 import { useHeroSlides } from "@/lib/use-hero-slides";
@@ -77,7 +78,7 @@ function LoginForm() {
             : await supabase.auth.signUp({
                 email,
                 password,
-                options: { emailRedirectTo: `${window.location.origin}/admin` },
+                options: { emailRedirectTo: window.location.origin + withBasePath("/admin") },
               });
         setBusy(false);
         if (error) return toast.error(error.message);
