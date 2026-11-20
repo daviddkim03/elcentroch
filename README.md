@@ -1,6 +1,5 @@
 # El Centro Korean Church website
 
-Source code for https://elcentro.lovable.app, rebuilt outside Lovable with the same
 design: the navy + gold colors, fonts, layout, copy, 한국어 / EN toggle, hero slider,
 404 page and the `/admin` slide manager. Automated screenshot comparisons against the
 live Lovable site (every public page and the admin sign-in screen, at desktop, laptop,
