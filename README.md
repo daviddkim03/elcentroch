@@ -24,8 +24,23 @@ npm run build      # writes the static site to out/
 ```
 
 Every page is pre-rendered to plain HTML (`out/about.html` is served at `/about`), so `out/`
-can go on any static host with clean URLs: Vercel, Netlify, Cloudflare Pages, GitHub Pages
-or Firebase Hosting. On Vercel, just import the repo.
+can go on any static host with clean URLs: GitHub Pages, Vercel, Netlify, Cloudflare Pages
+or Firebase Hosting.
+
+### GitHub Pages
+
+The site is live at https://daviddkim03.github.io/elcentroch/. Every push to `main` builds and
+publishes it with `.github/workflows/deploy.yml`; follow a run in the repo's Actions tab. This
+needs Settings > Pages > Source set to "GitHub Actions".
+
+GitHub serves a project site from `/<repo>/`, so the workflow builds with
+`NEXT_PUBLIC_BASE_PATH=/elcentroch`. Next adds that prefix to page links and to its own files,
+and page URLs there end in a slash (`/elcentroch/about/`; `next.config.ts` says why). Plain
+URLs to files in `public/` (images, the favicon) need `withBasePath()` from
+`src/lib/base-path.ts`, so use it whenever you add one.
+
+To use your own domain instead, add it under Settings > Pages > Custom domain. The next deploy
+builds for the domain root (no prefix) without any code change.
 
 ## Supabase (hero slides and admin)
 
@@ -40,8 +55,9 @@ What the code expects in Supabase:
 - `hero` storage bucket for uploaded images
 - `has_role(_user_id, _role)` function, used to check that a signed-in user is an admin
 
-When you deploy to a new domain, add it under Supabase > Authentication > URL Configuration
-so admin sign-up emails link back to the right site.
+When you deploy to a new domain, add its `/admin` URL (for GitHub Pages,
+`https://daviddkim03.github.io/elcentroch/admin`) under Supabase > Authentication > URL
+Configuration > Redirect URLs, so admin sign-up emails link back to the right site.
 
 ## Structure
 
@@ -52,6 +68,8 @@ so admin sign-up emails link back to the right site.
 - `src/lib/site.ts`: church info, navigation, built-in hero slides
 - `src/lib/i18n.tsx`: 한국어 / EN toggle (`t(ko, en)` in client components, `<T ko en />` elsewhere)
 - `src/lib/metadata.ts`: per-page title, description and social preview tags
+- `src/lib/base-path.ts`: `withBasePath()` for URLs to files in `public/`
+- `.github/workflows/deploy.yml`: builds and publishes to GitHub Pages on every push to `main`
 - `src/app/globals.css`: the color theme and the custom `eyebrow`, `hero-overlay`,
   `animate-fadeup` and `animate-kenburns` utilities
 
