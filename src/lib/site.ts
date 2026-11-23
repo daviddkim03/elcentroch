@@ -11,6 +11,9 @@ export const site = {
     "https://www.google.com/maps/search/?api=1&query=1274+W+El+Dorado+Ave+El+Centro+CA+92243",
   mapEmbed:
     "https://www.google.com/maps?q=1274+W+El+Dorado+Ave,+El+Centro,+CA+92243&output=embed",
+  // Linked by channel ID because, unlike the handle, it can never change.
+  youtubeUrl: "https://www.youtube.com/channel/UCy0nbGBgwEP9xO5MVqaxNpg",
+  youtubeHandle: "@elcentro.korean.church",
 };
 
 export const nav = [

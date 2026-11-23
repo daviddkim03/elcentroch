@@ -1,5 +1,6 @@
 import { ArrowRight, BookOpen, Clock, Heart, MapPin, Phone, Sprout, Users } from "lucide-react";
 import Link from "next/link";
+import { SiYoutube } from "react-icons/si";
 import { HeroSlider } from "@/components/hero-slider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -148,6 +149,18 @@ export default function Home() {
         <div className="mt-10 overflow-hidden shadow-sm">
           <iframe title="map" src={site.mapEmbed} className="h-96 w-full border-0" loading="lazy" />
         </div>
+        <a
+          href={site.youtubeUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-10 flex flex-col items-center border-t-2 border-gold bg-card px-10 pt-8 pb-10 text-center shadow-sm transition-shadow hover:shadow-lg"
+        >
+          <SiYoutube aria-hidden className="h-20 w-20 text-[#ff0033]" />
+          <h3 className="mt-3 text-xl font-bold">
+            <T ko="유튜브 채널" en="YouTube Channel" />
+          </h3>
+          <p className="mt-2 text-muted-foreground">{site.youtubeHandle}</p>
+        </a>
       </section>
 
       <SiteFooter />

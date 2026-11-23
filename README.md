@@ -7,7 +7,8 @@ tablet and phone widths, in Korean and English, plus hover, scroll, menu and toa
 states) came out pixel-identical.
 
 Stack: Next.js 15 (App Router, static export), React 19, Tailwind CSS v4,
-shadcn/ui components, lucide-react icons, sonner toasts, Supabase.
+shadcn/ui components, lucide-react icons (react-icons for the YouTube logo), sonner toasts,
+Supabase.
 
 ## Run locally
 
@@ -64,7 +65,7 @@ Configuration > Redirect URLs, so admin sign-up emails link back to the right si
 - `src/app/admin/`: slide manager (sign in, upload, reorder, captions)
 - `src/app/not-found.tsx`, `src/app/error.tsx`: 404 and error pages
 - `src/components/`: header, footer, hero slider, page shell, shadcn `ui/` primitives
-- `src/lib/site.ts`: church info, navigation, built-in hero slides
+- `src/lib/site.ts`: church info, map and YouTube links, navigation, built-in hero slides
 - `src/lib/i18n.tsx`: 한국어 / EN toggle (`t(ko, en)` in client components, `<T ko en />` elsewhere)
 - `src/lib/metadata.ts`: per-page title, description and social preview tags
 - `src/lib/base-path.ts`: `withBasePath()` for URLs to files in `public/`
@@ -79,3 +80,5 @@ Configuration > Redirect URLs, so admin sign-up emails link back to the right si
 - Fonts are self-hosted from `@fontsource-variable/noto-sans-kr` and `noto-serif-kr`, the same
   variable font files Google Fonts serves to the original.
 - The social preview image (`og:image` in `src/lib/metadata.ts`) is still hosted by Lovable.
+- One addition the original does not have, on purpose: the YouTube channel card on the home page,
+  below the map. Its logo comes from react-icons because lucide has no brand logos.
