@@ -48,15 +48,13 @@ works with the three built-in slides. Never put the database password or a secre
 
 ## Member portal
 
-Off until you switch it on. The public site works the same either way.
+On since November 2026. To hide it, set `NEXT_PUBLIC_MEMBER_PORTAL` to `off`. To set up a new project:
 
 1. `npx supabase link`, then `npx supabase db push --remote`. Each migration applies as a whole or
    not at all.
-2. Supabase > Authentication > URL Configuration: set Site URL to
-   `https://daviddkim03.github.io/elcentroch/` and add
-   `https://daviddkim03.github.io/elcentroch/**` to Redirect URLs.
-3. Supabase > Authentication > SMTP: add your own mail server. The built-in one sends only a few
-   emails an hour. Set the minimum password length to 8.
+2. Set the login URLs and password length with `npx supabase config push` (`supabase/config.toml`).
+3. Supabase > Authentication > SMTP: add your own mail server. The built-in one is
+   only for testing.
 4. Change `NEXT_PUBLIC_MEMBER_PORTAL` in `.env` to `on` and push.
 5. The pastor creates an account at `/login/`, confirms the email, then you run once in the SQL
    Editor: `select private.make_pastor('pastor@email', '김요셉');`
