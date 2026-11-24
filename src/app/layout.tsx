@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import { withBasePath } from "@/lib/base-path";
+import { AuthProvider } from "@/lib/auth";
 import { LangProvider } from "@/lib/i18n";
 import { ogImage } from "@/lib/metadata";
 // Self-hosted copies of the fonts the original loads from Google Fonts. Google
@@ -26,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko">
       <body>
         <LangProvider>
-          {children}
+          <AuthProvider>{children}</AuthProvider>
           <Toaster />
         </LangProvider>
       </body>
