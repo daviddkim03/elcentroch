@@ -7,6 +7,8 @@ export function Toaster(props: ToasterProps) {
   return (
     <Sonner
       className="toaster group"
+      // Clears the member area's bottom tab bar on phones.
+      mobileOffset={{ bottom: 88 }}
       toastOptions={{
         classNames: {
           toast:

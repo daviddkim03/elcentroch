@@ -21,7 +21,7 @@ export function AccountGate({ children }: { children: React.ReactNode }) {
   if (failed)
     return (
       <Notice title={t("불러오지 못했습니다", "Could not load")} body={t("인터넷 연결을 확인해 주세요.", "Please check your connection.")}>
-        <Button onClick={refresh}>{t("다시 시도", "Try again")}</Button>
+        <Button className="h-11" onClick={refresh}>{t("다시 시도", "Try again")}</Button>
       </Notice>
     );
   if (userId === undefined || member === undefined)
@@ -35,7 +35,7 @@ export function AccountGate({ children }: { children: React.ReactNode }) {
   if (active) return <>{children}</>;
 
   const out = (
-    <Button variant="outline" type="button" onClick={signOut}>
+    <Button className="h-11" variant="outline" type="button" onClick={signOut}>
       {t("로그아웃", "Sign out")}
     </Button>
   );
@@ -77,7 +77,7 @@ export function AccountGate({ children }: { children: React.ReactNode }) {
           : t("궁금한 점은 교회로 연락해 주세요.", "Please contact the church with any questions.")
       }
     >
-      {pending && <Button onClick={refresh}>{t("다시 확인", "Check again")}</Button>}
+      {pending && <Button className="h-11" onClick={refresh}>{t("다시 확인", "Check again")}</Button>}
       {out}
     </Notice>
   );

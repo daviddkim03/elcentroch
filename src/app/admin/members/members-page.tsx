@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Sheet } from "@/components/ui/sheet";
 import { useAuth } from "@/lib/auth";
-import { db, useAct, useQuery } from "@/lib/data";
+import { byName, db, useAct, useQuery } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import type { Group, Household, Member } from "@/lib/types";
 import { CareNotes } from "./care-notes";
@@ -46,7 +46,7 @@ export function MembersPage() {
   };
 
   const rows = useMemo(
-    () => members.data?.filter((m) => (!status || m.status === status) && (!group || m.group_id === group)) ?? none,
+    () => byName(members.data)?.filter((m) => (!status || m.status === status) && (!group || m.group_id === group)) ?? none,
     [members.data, status, group]
   );
   const table = useReactTable({

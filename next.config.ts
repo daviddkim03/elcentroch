@@ -11,11 +11,11 @@ const nextConfig: NextConfig = {
   // so `out/` can be hosted on any static host.
   output: "export",
   basePath,
-  // Under a sub-path, links to the home page come out as "/elcentroch", and
-  // Next then loads that page's data from "/elcentroch.txt", outside the site.
-  // Trailing slashes put every page and its data at <page>/index.html and
-  // <page>/index.txt. At a domain root, URLs stay "/about" like the original.
-  trailingSlash: basePath !== "",
+  // Every page is <page>/index.html. Under a sub-path Next otherwise links the
+  // home page as "/elcentroch" and loads its data from outside the site, and
+  // without it my.html would sit next to a my/ folder, which static hosts
+  // resolve differently. Sign-in emails link to the slash form too.
+  trailingSlash: true,
   images: { unoptimized: true },
 };
 

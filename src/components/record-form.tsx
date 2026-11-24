@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
+import { churchTimeToIso, isoToChurchTime } from "@/lib/church-time";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -29,11 +30,6 @@ export type Values = Record<string, unknown>;
 const youtubeId = (v: string) =>
   v.match(/(?:youtu\.be\/|[?&]v=|\/(?:embed|shorts|live)\/)([\w-]{11})/)?.[1] ?? (/^[\w-]{11}$/.test(v) ? v : null);
 
-const pad = (n: number) => String(n).padStart(2, "0");
-const toLocal = (iso: string) => {
-  const d = new Date(iso);
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-};
 
 /** A form described by its fields. Blank optional fields are submitted as null. */
 export function RecordForm({
@@ -78,7 +74,7 @@ export function RecordForm({
     for (const f of fields) {
       const v = (values as Values | null | undefined)?.[f.name] ?? f.default;
       out[f.name] =
-        f.type === "checkbox" ? !!v : f.type === "file" ? undefined : v == null ? "" : f.type === "datetime" ? toLocal(String(v)) : String(v);
+        f.type === "checkbox" ? !!v : f.type === "file" ? undefined : v == null ? "" : f.type === "datetime" ? isoToChurchTime(String(v)) : String(v);
     }
     return out;
   }, [fields, values]);
@@ -96,7 +92,7 @@ export function RecordForm({
       else if (f.type === "file") out[f.name] = (v as FileList | undefined)?.[0] ?? null;
       else if (v === "") out[f.name] = null;
       else if (f.type === "number" || f.type === "money") out[f.name] = Number(v);
-      else if (f.type === "datetime") out[f.name] = new Date(v as string).toISOString();
+      else if (f.type === "datetime") out[f.name] = churchTimeToIso(v as string);
       else if (f.type === "youtube") out[f.name] = youtubeId(v as string);
       else out[f.name] = v;
     }
@@ -125,7 +121,7 @@ export function RecordForm({
             {f.type === "textarea" ? (
               <Textarea {...shared} />
             ) : f.type === "select" ? (
-              <NativeSelect {...shared}>
+              <NativeSelect {...shared} className="h-11 md:h-9">
                 {!f.required && <option value="">-</option>}
                 {f.options?.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -136,6 +132,7 @@ export function RecordForm({
             ) : (
               <Input
                 {...shared}
+                className="h-11 md:h-9"
                 type={
                   f.type === "datetime"
                     ? "datetime-local"
@@ -159,7 +156,7 @@ export function RecordForm({
         );
       })}
       <div className="col-span-2 flex flex-wrap items-center gap-3 pt-2">
-        <Button disabled={formState.isSubmitting}>{submitLabel ?? t("저장", "Save")}</Button>
+        <Button className="h-11 md:h-9" disabled={formState.isSubmitting}>{submitLabel ?? t("저장", "Save")}</Button>
         {children}
       </div>
     </form>

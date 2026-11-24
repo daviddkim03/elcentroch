@@ -98,6 +98,10 @@ export function useUndoDelete() {
   );
 }
 
+/** Korean alphabetical order, independent of the database's collation. */
+export const byName = <T extends { name_ko: string }>(rows: T[] | undefined) =>
+  rows && [...rows].sort((a, b) => a.name_ko.localeCompare(b.name_ko, "ko"));
+
 /** Today in the church's time zone, as YYYY-MM-DD. */
 export const today = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" });
 

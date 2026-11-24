@@ -28,7 +28,7 @@ export function LoginPanel({ next, signUp = true }: { next: "/my" | "/admin"; si
 
   if (!supabase) return <p className="text-center text-muted-foreground">{t("로그인이 설정되지 않았습니다.", "Login is not set up.")}</p>;
   const auth = supabase.auth;
-  // Trailing slash: the form GitHub Pages serves, so the sign-in hash survives without a redirect.
+  // Trailing slash: the exact page URL (next.config.ts), so no redirect is needed.
   const back = () => window.location.origin + withBasePath(`${next}/`);
 
   const submit = async (e: React.FormEvent) => {

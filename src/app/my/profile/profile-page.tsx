@@ -34,7 +34,7 @@ export function ProfilePage() {
           if (await act(db().from("members").update(v).eq("id", member!.id), "저장했습니다", "Saved")) await refresh();
         }}
       >
-        <Button type="button" variant="outline" onClick={signOut}>
+        <Button className="h-11 md:h-9" type="button" variant="outline" onClick={signOut}>
           {t("로그아웃", "Sign out")}
         </Button>
       </RecordForm>

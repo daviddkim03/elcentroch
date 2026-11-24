@@ -26,7 +26,15 @@ export function LogPage() {
     "member.link": t("계정 연결 승인", "Approved and linked"),
     "member.delete": t("교인 기록 삭제", "Deleted member record"),
   };
-  const label = (a: string) => names[a] ?? (a.startsWith("member.") ? `${t("교인 상태/권한", "Member status/role")}: ${a.slice(7)}` : a);
+  const words: Record<string, string> = {
+    active: t("활동", "Active"), pending: t("승인 대기", "Pending"), inactive: t("비활동", "Inactive"), declined: t("거절됨", "Declined"),
+    pastor: t("목사", "Pastor"), admin: t("관리자", "Admin"), member: t("교인", "Member"),
+  };
+  const label = (a: string) =>
+    names[a] ??
+    (a.startsWith("member.")
+      ? `${t("교인 상태 변경", "Changed member")}: ${a.slice(7).split(".").map((w) => words[w] ?? w).join(", ")}`
+      : a);
   if (!isPastor) return <p className="text-muted-foreground">{t("목사님만 볼 수 있습니다.", "Pastor only.")}</p>;
   return (
     <>

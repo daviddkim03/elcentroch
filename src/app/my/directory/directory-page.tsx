@@ -5,7 +5,7 @@ import { useState } from "react";
 import { DataView, PageTitle } from "@/components/data-view";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
-import { db, useQuery } from "@/lib/data";
+import { byName, db, useQuery } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 
 type Entry = {
@@ -28,7 +28,7 @@ export function DirectoryPage() {
   const needle = find.trim().toLowerCase();
   const shown = {
     ...q,
-    data: q.data?.filter((p) => `${p.name_ko} ${p.name_en ?? ""} ${p.group_ko ?? ""}`.toLowerCase().includes(needle)),
+    data: byName(q.data)?.filter((p) => `${p.name_ko} ${p.name_en ?? ""} ${p.group_ko ?? ""}`.toLowerCase().includes(needle)),
   };
   return (
     <>

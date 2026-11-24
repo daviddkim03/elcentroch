@@ -2,6 +2,7 @@ import { InfoCard, PageShell } from "@/components/page-shell";
 import { T } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/metadata";
 import { images, site } from "@/lib/site";
+import { portalOn } from "@/lib/supabase";
 import { VisitForm } from "./visit-form";
 
 export const metadata = pageMetadata({
@@ -24,19 +25,23 @@ export default function VisitPage() {
       <div className="mt-16 grid gap-10 md:grid-cols-[1fr_1.5fr]">
         <div>
           <h2 className="text-3xl font-bold">
-            <T ko="미리 알려 주세요" en="Let us know you're coming" />
+            <T ko="궁금한 점이 있으신가요?" en="Have a question?" />
           </h2>
           <p className="mt-4 leading-relaxed text-muted-foreground">
-            <T
-              ko="궁금한 점이나 자녀와 함께 오시는지 등을 남겨 주시면 연락드리겠습니다."
-              en="Ask a question or tell us if you are bringing children, and we will get back to you."
-            />
+            {portalOn ? (
+              <T
+                ko="궁금한 점이나 자녀와 함께 오시는지 등을 남겨 주시면 연락드리겠습니다."
+                en="Ask a question or tell us if you are bringing children, and we will get back to you."
+              />
+            ) : (
+              <T ko="궁금한 점이 있으시면 언제든지 전화해 주세요." en="Call us any time with questions." />
+            )}
           </p>
           <a href={`tel:${site.phone}`} className="mt-4 inline-block font-medium underline underline-offset-4">
             {site.phone}
           </a>
         </div>
-        <VisitForm />
+        {portalOn && <VisitForm />}
       </div>
     </PageShell>
   );

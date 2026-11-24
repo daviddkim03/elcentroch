@@ -53,7 +53,7 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
             {t(site.nameEn, site.nameKo)}
           </span>
         </NavLink>
-        <nav className="hidden items-center gap-7 lg:flex xl:gap-9">
+        <nav className="hidden items-center gap-7 xl:flex">
           {nav.map((n) => (
             <NavLink
               key={n.to}
@@ -71,7 +71,7 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
           )}
           <LangToggle light={light} />
         </nav>
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex items-center gap-3 xl:hidden">
           <LangToggle light={light} />
           <button onClick={() => setOpen(!open)} aria-label="Menu">
             {open ? <X /> : <Menu />}
@@ -79,7 +79,7 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
         </div>
       </div>
       {open && (
-        <nav className="border-t bg-background px-6 py-4 lg:hidden">
+        <nav className="border-t bg-background px-6 py-4 xl:hidden">
           {nav.map((n) => (
             <NavLink
               key={n.to}

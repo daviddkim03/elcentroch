@@ -2,11 +2,8 @@
 
 import { useState } from "react";
 import { RecordForm } from "@/components/record-form";
-import { Button } from "@/components/ui/button";
 import { db, useAct } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
-import { site } from "@/lib/site";
-import { portalOn } from "@/lib/supabase";
 
 const fields = [
   { name: "name", ko: "이름", en: "Name", required: true, max: 80 },
@@ -20,14 +17,6 @@ export function VisitForm() {
   const [sent, setSent] = useState(false);
   const [trap, setTrap] = useState("");
 
-  if (!portalOn)
-    return (
-      <div className="flex items-center border bg-card p-8">
-        <Button asChild className="h-11">
-          <a href={`tel:${site.phone}`}>{t("전화하기", "Call us")}</a>
-        </Button>
-      </div>
-    );
   if (sent)
     return (
       <p role="status" className="border bg-card p-8 text-lg">

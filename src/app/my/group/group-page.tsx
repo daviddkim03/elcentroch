@@ -6,7 +6,7 @@ import { RecordForm } from "@/components/record-form";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { db, useAct, useFormat, useQuery, useUndoDelete } from "@/lib/data";
+import { byName, db, useAct, useFormat, useQuery, useUndoDelete } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import type { Group, GroupPost } from "@/lib/types";
 
@@ -45,7 +45,7 @@ function GroupView({ g }: { g: Group }) {
         <DataView query={roster} empty={t("아직 구성원이 없습니다.", "No one here yet.")} rows={1}>
           {(d) => (
             <ul className="flex flex-wrap gap-x-6 gap-y-1">
-              {d.map((p) => (
+              {byName(d)!.map((p) => (
                 <li key={p.id} className="py-1">
                   {t(p.name_ko, p.name_en ?? p.name_ko)}
                   {p.phone && <a href={`tel:${p.phone}`} className="ml-2 text-sm text-muted-foreground">{p.phone}</a>}

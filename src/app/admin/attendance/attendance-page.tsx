@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { DataView, PageTitle } from "@/components/data-view";
 import { Input } from "@/components/ui/input";
-import { db, today, useAct, useQuery } from "@/lib/data";
+import { byName, db, today, useAct, useQuery } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import type { Member } from "@/lib/types";
 
@@ -29,7 +29,7 @@ export function AttendancePage() {
 
   const needle = find.trim().toLowerCase();
   const q = {
-    data: people.data && here.data && people.data.filter((m) => `${m.name_ko} ${m.name_en ?? ""}`.toLowerCase().includes(needle)),
+    data: people.data && here.data && byName(people.data)!.filter((m) => `${m.name_ko} ${m.name_en ?? ""}`.toLowerCase().includes(needle)),
     error: people.error || here.error,
     reload: () => {
       people.reload();
