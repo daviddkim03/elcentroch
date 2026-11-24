@@ -25,9 +25,8 @@ export function SlideManager() {
         const path = `${crypto.randomUUID()}-${f.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
         const up = await sb.storage.from("hero").upload(path, f);
         if (up.error) throw up.error;
-        const signed = await sb.storage.from("hero").createSignedUrl(path, 315360000);
-        if (signed.error) throw signed.error;
-        const ins = await sb.from("hero_slides").insert({ image_url: signed.data.signedUrl, sort_order: order++ });
+        const { publicUrl } = sb.storage.from("hero").getPublicUrl(path).data;
+        const ins = await sb.from("hero_slides").insert({ image_url: publicUrl, sort_order: order++ });
         if (ins.error) throw ins.error;
       }
       toast.success(t("업로드 완료", "Uploaded"));
@@ -69,7 +68,7 @@ export function SlideManager() {
           <p className="mt-1 text-sm text-muted-foreground">{t("슬라이드가 없으면 기본 이미지가 표시됩니다.", "With no slides, the built-in images are shown.")}</p>
         </div>
         <label className="cursor-pointer">
-          <input type="file" accept="image/*" multiple className="peer sr-only" onChange={(e) => upload(e.target.files)} />
+          <input type="file" accept="image/jpeg,image/png,image/webp" multiple className="peer sr-only" onChange={(e) => upload(e.target.files)} />
           <span className="inline-flex h-10 items-center rounded-md bg-primary px-5 peer-focus-visible:ring-2 peer-focus-visible:ring-ring text-sm font-medium text-primary-foreground">
             {uploading ? t("업로드 중...", "Uploading...") : t("+ 이미지 추가", "+ Add images")}
           </span>

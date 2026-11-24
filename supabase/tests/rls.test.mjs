@@ -1,6 +1,6 @@
 // Security rules, exercised as each kind of user on an in-process Postgres.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { after, before, test } from "node:test";
 import { PGlite } from "@electric-sql/pglite";
 
@@ -36,14 +36,14 @@ before(async () => {
     grant usage on schema public to anon, authenticated;
     alter default privileges in schema public grant all on tables to anon, authenticated;
     alter default privileges in schema public grant all on functions to anon, authenticated;
-    create schema storage; create table storage.buckets (id text primary key, name text, public bool);
+    create schema storage; create table storage.buckets (id text primary key, name text, public bool, file_size_limit bigint, allowed_mime_types text[]);
     create table storage.objects (id uuid default gen_random_uuid(), bucket_id text, name text);
     alter table storage.objects enable row level security;
     grant usage on schema storage to anon, authenticated;
     grant all on storage.objects to anon, authenticated;
-    create table public.hero_slides (id int); alter table public.hero_slides enable row level security;
   `);
-  await db.exec(readFileSync(new URL("../migrations/20261124000000_member_portal.sql", import.meta.url), "utf8"));
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).sort()) await db.exec(readFileSync(new URL(f, dir), "utf8"));
   for (const [n, u] of Object.entries(U))
     await root("insert into auth.users values ($1, $2, now())", [u, `${n}@x.test`]);
   await root("select private.make_pastor('pastor@x.test', '목사')");
@@ -200,6 +200,21 @@ test("absentees: missed the last three services", async () => {
     await as("admin", "insert into attendance values ($1,$2)", [d, id[who]]);
   assert.deepEqual((await as("admin", "select name from absentees()")).map((r) => r.name), ["ann"]);
   assert.equal((await as("ben", "select * from absentees()")).length, 0);
+});
+
+test("home slides and files: public sees slides, only staff change them", async () => {
+  await as("admin", "insert into hero_slides(image_url) values ('x')");
+  assert.equal((await as("anon", "select * from hero_slides")).length, 1);
+  await denied(as("anon", "insert into hero_slides(image_url) values ('x')"));
+  for (const n of ["ann", "pending"]) {
+    await denied(as(n, "insert into hero_slides(image_url) values ('x')"));
+    await as(n, "delete from hero_slides");
+    for (const b of ["hero", "church-files"]) await denied(as(n, "insert into storage.objects(bucket_id, name) values ($1,'x')", [b]));
+  }
+  assert.equal((await root("select * from hero_slides")).length, 1);
+  await as("admin", "insert into storage.objects(bucket_id, name) values ('church-files','x')");
+  assert.equal((await as("ann", "select * from storage.objects")).length, 1);
+  assert.equal((await as("pending", "select * from storage.objects")).length, 0);
 });
 
 test("visit form: anyone can send, staff read, floods stop", async () => {

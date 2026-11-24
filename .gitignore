@@ -44,3 +44,7 @@ next-env.d.ts
 e2e/.bin
 e2e/.results
 e2e/.shots
+
+# supabase cli
+supabase/.temp
+supabase/.branches

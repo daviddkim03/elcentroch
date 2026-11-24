@@ -1,5 +1,4 @@
 -- Member portal: accounts approved by the pastor, plus everything behind login.
--- Runs on top of the existing project (hero_slides, has_role) without changing its tables.
 -- Every table is closed by default: each grant and policy below is deliberate.
 begin;
 
@@ -729,26 +728,21 @@ do $$ declare f text; begin
 end $$;
 grant execute on function public.submit_visit(text, text, text) to anon;
 
--- ── Files and the existing slide manager ────────────────────────────────────
+-- ── Files and home slides ────────────────────────────────────
 
-do $$ begin
-  if to_regclass('storage.buckets') is not null then
-    insert into storage.buckets (id, name, public) values ('church-files', 'church-files', false)
-      on conflict (id) do nothing;
-    create policy "church files: read" on storage.objects for select to authenticated
-      using (bucket_id = 'church-files' and private.my_id() is not null);
-    create policy "church files: staff" on storage.objects for all to authenticated
-      using (bucket_id = 'church-files' and private.is_staff())
-      with check (bucket_id = 'church-files' and private.is_staff());
-    create policy "hero: portal staff" on storage.objects for all to authenticated
-      using (bucket_id = 'hero' and private.is_staff())
-      with check (bucket_id = 'hero' and private.is_staff());
-  end if;
-  if to_regclass('public.hero_slides') is not null then
-    create policy "portal staff" on public.hero_slides for all to authenticated
-      using (private.is_staff()) with check (private.is_staff());
-  end if;
-end $$;
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('church-files', 'church-files', false, 20971520,
+  array['application/pdf', 'image/jpeg', 'image/png', 'image/webp']);
+create policy "church files: read" on storage.objects for select to authenticated
+  using (bucket_id = 'church-files' and private.my_id() is not null);
+create policy "church files: staff" on storage.objects for all to authenticated
+  using (bucket_id = 'church-files' and private.is_staff())
+  with check (bucket_id = 'church-files' and private.is_staff());
+create policy "hero: staff" on storage.objects for all to authenticated
+  using (bucket_id = 'hero' and private.is_staff())
+  with check (bucket_id = 'hero' and private.is_staff());
+create policy staff on public.hero_slides for all to authenticated
+  using (private.is_staff()) with check (private.is_staff());
 
 notify pgrst, 'reload schema';
 commit;

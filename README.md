@@ -40,29 +40,18 @@ URLs to files in `public/` (images, the favicon) need `withBasePath()` from
 To use your own domain instead, add it under Settings > Pages > Custom domain. The next deploy
 builds for the domain root (no prefix) without any code change.
 
-## Supabase (hero slides and admin)
+## Supabase
 
-The site uses the same Supabase project as the Lovable version, so slides you manage at
-`/admin` show up on the home page. `.env` holds its URL and publishable key; both are public
-by design (they ship in the browser bundle, and row-level security protects the data). If
-they are missing, the site still works and shows the three built-in slides.
-
-What the code expects in Supabase:
-
-- `hero_slides` table: `id`, `image_url`, `title_ko`, `title_en`, `subtitle_ko`, `subtitle_en`, `sort_order`
-- `hero` storage bucket for uploaded images
-- `has_role(_user_id, _role)` function, used to check that a signed-in user is an admin
-
-When you deploy to a new domain, add its `/admin` URL (for GitHub Pages,
-`https://daviddkim03.github.io/elcentroch/admin/`) under Supabase > Authentication > URL
-Configuration > Redirect URLs, so admin sign-up emails link back to the right site.
+`.env` holds the project's URL and publishable key; both are public by design (they ship in the
+browser bundle, and row-level security protects the data). If they are missing, the site still
+works with the three built-in slides. Never put the database password or a secret key there.
 
 ## Member portal
 
 Off until you switch it on. The public site works the same either way.
 
-1. Take a database backup, then run `supabase/migrations/*.sql` in Supabase > SQL Editor. It only
-   adds tables, functions and policies; it fails as a whole if a table name is already taken.
+1. `npx supabase link`, then `npx supabase db push --remote`. Each migration applies as a whole or
+   not at all.
 2. Supabase > Authentication > URL Configuration: set Site URL to
    `https://daviddkim03.github.io/elcentroch/` and add
    `https://daviddkim03.github.io/elcentroch/**` to Redirect URLs.

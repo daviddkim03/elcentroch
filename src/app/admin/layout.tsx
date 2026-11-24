@@ -5,7 +5,7 @@ import {
   Menu, Newspaper, ScrollText, UserPlus, Users, UsersRound, X,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Notice } from "@/components/account-gate";
 import { CommandMenu } from "@/components/command-menu";
 import { LangToggle } from "@/components/lang-toggle";
@@ -16,9 +16,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/lib/auth";
 import { useLang } from "@/lib/i18n";
 import { site } from "@/lib/site";
-import { portalOn, supabase } from "@/lib/supabase";
+import { portalOn } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
-import { SlideManager } from "./slides/slide-manager";
 
 const links = [
   { to: "/admin", icon: LayoutDashboard, ko: "대시보드", en: "Dashboard" },
@@ -41,20 +40,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { userId, member, isStaff, isPastor, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const [command, setCommand] = useState(false);
-  // People who managed slides before the portal existed keep that access.
-  const [slidesOnly, setSlidesOnly] = useState<boolean | undefined>(undefined);
-
-  useEffect(() => {
-    setSlidesOnly(undefined);
-    if (!userId || !supabase) return;
-    let stale = false;
-    supabase.rpc("has_role", { _user_id: userId, _role: "admin" }).then(({ data }) => {
-      if (!stale) setSlidesOnly(!!data);
-    });
-    return () => {
-      stale = true;
-    };
-  }, [userId]);
 
   const visible = isStaff ? links.filter((l) => !l.pastor || isPastor) : [];
 
@@ -62,14 +47,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (userId === null)
     body = <div className="px-4 py-16"><LoginPanel next="/admin" signUp={false} /></div>;
   else if (isStaff) body = children;
-  else if (userId === undefined || (portalOn && member === undefined) || slidesOnly === undefined)
+  else if (userId === undefined || (portalOn && member === undefined))
     body = (
       <div aria-busy className="space-y-4">
         <Skeleton className="h-9 w-48" />
         <Skeleton className="h-40" />
       </div>
     );
-  else if (slidesOnly) body = <SlideManager />;
   else
     body = (
       <Notice title={t("관리자 권한이 없습니다", "Admin access required")} body={t("담임목사님께 문의해 주세요.", "Please ask the pastor.")}>

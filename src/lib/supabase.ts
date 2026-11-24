@@ -8,8 +8,7 @@ const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 export const openedFromRecoveryLink =
   typeof window !== "undefined" && window.location.hash.includes("type=recovery");
 
-// Same Supabase project the Lovable site uses (hero_slides table, "hero" storage bucket,
-// has_role RPC). If env vars are missing, the site falls back to the default slides.
+// Without the env vars the site still works, with the built-in slides and no login.
 export const supabase: SupabaseClient | null =
   url && key ? createClient(url, key) : null;
 

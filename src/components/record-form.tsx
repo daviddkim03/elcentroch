@@ -143,7 +143,7 @@ export function RecordForm({
                         : (f.type ?? "text")
                 }
                 step={f.type === "money" ? "0.01" : undefined}
-                accept={f.type === "file" ? "application/pdf,image/*" : undefined}
+                accept={f.type === "file" ? "application/pdf,image/jpeg,image/png,image/webp" : undefined}
               />
             )}
             {f.hint && <p className="text-xs text-muted-foreground">{f.hint}</p>}

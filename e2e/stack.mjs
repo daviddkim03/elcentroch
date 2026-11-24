@@ -36,16 +36,12 @@ await sql.query(`
   create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;
   create role authenticator noinherit login password 'postgres'; grant anon, authenticated, service_role to authenticator;
   create schema auth; alter database postgres set search_path to public;
-  create schema storage; create table storage.buckets (id text primary key, name text, public bool);
+  create schema storage; create table storage.buckets (id text primary key, name text, public bool, file_size_limit bigint, allowed_mime_types text[]);
   create table storage.objects (id uuid default gen_random_uuid(), bucket_id text, name text);
   alter table storage.objects enable row level security;
   grant usage on schema public, storage to anon, authenticated, service_role;
   alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
   alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
-  create table public.hero_slides (id uuid primary key default gen_random_uuid(), image_url text, title_ko text, title_en text,
-    subtitle_ko text, subtitle_en text, sort_order int);
-  alter table public.hero_slides enable row level security; create policy r on public.hero_slides for select using (true);
-  create function public.has_role(_user_id uuid, _role text) returns boolean language sql as 'select false';
 `);
 
 const jwt = (role) => {

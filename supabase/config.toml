@@ -1,0 +1,6 @@
+project_id = "pubqpyfnsucmkwsraoia"
+
+[auth]
+site_url = "https://daviddkim03.github.io/elcentroch/"
+additional_redirect_urls = ["https://daviddkim03.github.io/elcentroch/**"]
+minimum_password_length = 8
