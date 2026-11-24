@@ -2,39 +2,17 @@
 
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/lib/auth";
 import { useLang } from "@/lib/i18n";
 import { nav, site } from "@/lib/site";
+import { portalOn } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
+import { LangToggle } from "./lang-toggle";
 import { NavLink } from "./nav-link";
-
-function LangToggle({ light }: { light: boolean }) {
-  const { lang, setLang } = useLang();
-  return (
-    <div
-      className={cn(
-        "flex items-center rounded-full border text-xs font-medium",
-        light ? "border-ink-foreground/40" : "border-border"
-      )}
-    >
-      {(["ko", "en"] as const).map((l) => (
-        <button
-          key={l}
-          onClick={() => setLang(l)}
-          aria-pressed={lang === l}
-          className={cn(
-            "rounded-full px-3 py-1 transition-colors",
-            lang === l && "bg-accent text-accent-foreground"
-          )}
-        >
-          {l === "ko" ? "한국어" : "EN"}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 export function SiteHeader({ transparent }: { transparent?: boolean }) {
   const { t } = useLang();
+  const { userId } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -46,6 +24,11 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
   }, []);
 
   const light = !!transparent && !scrolled && !open;
+
+  const account = portalOn && {
+    href: userId ? "/my" : "/login",
+    label: userId ? t("내 교회", "My page") : t("로그인", "Login"),
+  };
 
   return (
     <header
@@ -70,7 +53,7 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
             {t(site.nameEn, site.nameKo)}
           </span>
         </NavLink>
-        <nav className="hidden items-center gap-9 lg:flex">
+        <nav className="hidden items-center gap-7 lg:flex xl:gap-9">
           {nav.map((n) => (
             <NavLink
               key={n.to}
@@ -81,6 +64,11 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
               {t(n.ko, n.en)}
             </NavLink>
           ))}
+          {account && (
+            <NavLink href={account.href} className="text-sm transition-colors hover:text-gold">
+              {account.label}
+            </NavLink>
+          )}
           <LangToggle light={light} />
         </nav>
         <div className="flex items-center gap-3 lg:hidden">
@@ -102,6 +90,11 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
               {t(n.ko, n.en)}
             </NavLink>
           ))}
+          {account && (
+            <NavLink href={account.href} className="block border-t py-3 text-base font-medium">
+              {account.label}
+            </NavLink>
+          )}
         </nav>
       )}
     </header>

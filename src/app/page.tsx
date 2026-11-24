@@ -1,6 +1,7 @@
 import { ArrowRight, BookOpen, Clock, Heart, MapPin, Phone, Sprout, Users } from "lucide-react";
 import Link from "next/link";
 import { SiYoutube } from "react-icons/si";
+import { PublicEvents } from "@/components/public-feed";
 import { HeroSlider } from "@/components/hero-slider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -71,6 +72,12 @@ export default function Home() {
             className="mt-8 inline-flex items-center gap-2 border-b-2 border-gold pb-1 font-medium"
           >
             <T ko="교회소개 더보기" en="Learn more" /> <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            href="/visit"
+            className="mt-8 ml-8 inline-flex items-center gap-2 border-b-2 border-gold pb-1 font-medium"
+          >
+            <T ko="처음 오시나요?" en="Plan a visit" /> <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
         <div className="relative">
@@ -149,19 +156,37 @@ export default function Home() {
         <div className="mt-10 overflow-hidden shadow-sm">
           <iframe title="map" src={site.mapEmbed} className="h-96 w-full border-0" loading="lazy" />
         </div>
-        <a
-          href={site.youtubeUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-10 flex flex-col items-center border-t-2 border-gold bg-card px-10 pt-8 pb-10 text-center shadow-sm transition-shadow hover:shadow-lg"
-        >
-          <SiYoutube aria-hidden className="h-20 w-20 text-[#ff0033]" />
-          <h3 className="mt-3 text-xl font-bold">
-            <T ko="유튜브 채널" en="YouTube Channel" />
-          </h3>
-          <p className="mt-2 text-muted-foreground">{site.youtubeHandle}</p>
-        </a>
       </section>
+
+      <section className="border-t bg-card">
+        <div className="mx-auto max-w-5xl px-6 py-28">
+          <div className="text-center">
+            <p className="eyebrow">Sermons</p>
+            <h2 className="mt-4 text-3xl font-bold md:text-4xl">
+              <T ko="최근 설교" en="Latest Sermon" />
+            </h2>
+          </div>
+          <iframe
+            title="YouTube"
+            src={site.youtubeLatest}
+            className="mt-14 aspect-video w-full border-0 bg-ink"
+            loading="lazy"
+            allow="encrypted-media; picture-in-picture; fullscreen"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+            <Link href="/sermons" className="inline-flex items-center gap-2 border-b-2 border-gold pb-1 font-medium">
+              <T ko="설교 모두 보기" en="All sermons" /> <ArrowRight className="h-4 w-4" />
+            </Link>
+            <a href={site.youtubeUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-medium hover:text-gold">
+              <SiYoutube aria-hidden className="h-6 w-6 text-[#ff0033]" />
+              {site.youtubeHandle}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <PublicEvents home />
 
       <SiteFooter />
     </div>

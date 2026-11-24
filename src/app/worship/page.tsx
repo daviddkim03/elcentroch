@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { InfoCard, PageShell } from "@/components/page-shell";
 import { T } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/metadata";
@@ -28,6 +29,14 @@ export default function WorshipPage() {
       <div className="mt-16 grid gap-6 md:grid-cols-2">
         <InfoCard titleKo="주일 설교" titleEn="Sunday Sermons" ko="매 주일 선포되는 말씀으로 한 주를 살아갈 힘을 얻습니다." en="Receive strength for the week through the Word proclaimed each Sunday." />
         <InfoCard titleKo="처음 오신 분" titleEn="First Time?" ko="처음 방문하시는 분들을 따뜻하게 환영합니다. 예배 후 함께 교제의 시간을 가집니다." en="First-time guests are warmly welcomed. Join us for fellowship after the service." />
+      </div>
+      <div className="mt-12 flex flex-wrap gap-8">
+        <Link href="/sermons" className="border-b-2 border-gold pb-1 font-medium">
+          <T ko="설교 보기" en="Watch sermons" />
+        </Link>
+        <Link href="/visit" className="border-b-2 border-gold pb-1 font-medium">
+          <T ko="처음 오신 분 안내" en="Plan a visit" />
+        </Link>
       </div>
     </PageShell>
   );

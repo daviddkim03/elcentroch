@@ -13,10 +13,13 @@ export const site = {
     "https://www.google.com/maps?q=1274+W+El+Dorado+Ave,+El+Centro,+CA+92243&output=embed",
   // Linked by channel ID because, unlike the handle, it can never change.
   youtubeUrl: "https://www.youtube.com/channel/UCy0nbGBgwEP9xO5MVqaxNpg",
+  // Every channel has an uploads playlist: its ID with UC swapped for UU. Newest video first.
+  youtubeLatest: "https://www.youtube-nocookie.com/embed/videoseries?list=UUy0nbGBgwEP9xO5MVqaxNpg",
   youtubeHandle: "@elcentro.korean.church",
 };
 
 export const nav = [
+  { to: "/visit", ko: "처음 오신 분", en: "Plan a Visit" },
   { to: "/about", ko: "교회소개", en: "About" },
   { to: "/worship", ko: "예배와 말씀", en: "Worship & Word" },
   { to: "/ministry", ko: "사역", en: "Ministries" },
