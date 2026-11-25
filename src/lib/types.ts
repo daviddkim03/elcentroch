@@ -1,8 +1,9 @@
+export type Role = "superadmin" | "pastor" | "admin" | "member";
 export type Member = {
   id: string;
   user_id: string | null;
   status: "pending" | "active" | "declined" | "inactive";
-  role: "pastor" | "admin" | "member";
+  role: Role;
   name_ko: string;
   name_en: string | null;
   email: string | null;

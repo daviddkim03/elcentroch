@@ -2,7 +2,7 @@
 
 import {
   Baby, BookOpen, CalendarCheck, CalendarDays, ClipboardList, Command as CommandIcon, HandCoins, Images, LayoutDashboard,
-  Menu, Newspaper, ScrollText, UserPlus, Users, UsersRound, X,
+  Menu, Newspaper, ScrollText, ShieldCheck, UserPlus, Users, UsersRound, X,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -32,16 +32,17 @@ const links = [
   { to: "/admin/children", icon: Baby, ko: "주일학교", en: "Children" },
   { to: "/admin/giving", icon: HandCoins, ko: "헌금", en: "Giving" },
   { to: "/admin/slides", icon: Images, ko: "메인 슬라이드", en: "Home slides" },
-  { to: "/admin/log", icon: ScrollText, ko: "접근 기록", en: "Access log", pastor: true },
+  { to: "/admin/access", icon: ShieldCheck, ko: "권한", en: "Access", superOnly: true },
+  { to: "/admin/log", icon: ScrollText, ko: "접근 기록", en: "Access log", superOnly: true },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { t } = useLang();
-  const { userId, member, isStaff, isPastor, signOut } = useAuth();
+  const { userId, member, isStaff, isSuper, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const [command, setCommand] = useState(false);
 
-  const visible = isStaff ? links.filter((l) => !l.pastor || isPastor) : [];
+  const visible = isStaff ? links.filter((l) => !l.superOnly || isSuper) : [];
 
   let body: React.ReactNode;
   if (userId === null)

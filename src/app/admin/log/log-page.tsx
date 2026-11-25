@@ -2,7 +2,7 @@
 
 import { DataView, PageTitle } from "@/components/data-view";
 import { useAuth } from "@/lib/auth";
-import { db, useFormat, useQuery } from "@/lib/data";
+import { db, roleNames, useFormat, useQuery } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 
 type Entry = { id: number; actor_name: string; action: string; target: string | null; at: string };
@@ -10,8 +10,8 @@ type Entry = { id: number; actor_name: string; action: string; target: string | 
 export function LogPage() {
   const { t } = useLang();
   const f = useFormat();
-  const { isPastor } = useAuth();
-  const q = useQuery<Entry[]>(() => db().from("access_log").select("*").order("id", { ascending: false }).limit(200), [], isPastor);
+  const { isSuper } = useAuth();
+  const q = useQuery<Entry[]>(() => db().from("access_log").select("*").order("id", { ascending: false }).limit(200), [], isSuper);
   const names: Record<string, string> = {
     "care.read": t("돌봄 기록 열람", "Viewed care notes"),
     "care.add": t("돌봄 기록 추가", "Added care note"),
@@ -28,14 +28,14 @@ export function LogPage() {
   };
   const words: Record<string, string> = {
     active: t("활동", "Active"), pending: t("승인 대기", "Pending"), inactive: t("비활동", "Inactive"), declined: t("거절됨", "Declined"),
-    pastor: t("목사", "Pastor"), admin: t("관리자", "Admin"), member: t("교인", "Member"),
+    ...Object.fromEntries(Object.entries(roleNames).map(([k, v]) => [k, t(...v)])),
   };
   const label = (a: string) =>
     names[a] ??
     (a.startsWith("member.")
       ? `${t("교인 상태 변경", "Changed member")}: ${a.slice(7).split(".").map((w) => words[w] ?? w).join(", ")}`
       : a);
-  if (!isPastor) return <p className="text-muted-foreground">{t("목사님만 볼 수 있습니다.", "Pastor only.")}</p>;
+  if (!isSuper) return <p className="text-muted-foreground">{t("최고 관리자만 볼 수 있습니다.", "Super admins only.")}</p>;
   return (
     <>
       <PageTitle title={t("접근 기록", "Access log")} sub={t("민감한 정보를 누가 보고 바꿨는지 보여 줍니다.", "Who viewed or changed sensitive information.")} />

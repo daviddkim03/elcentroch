@@ -65,7 +65,7 @@ test("signed-out people get a sign-in form, not data", async ({ browser }) => {
 test("members apply and wait; the pastor approves", async ({ browser, request }) => {
   pastor = await open(browser, desk);
   await signUp(pastor, "pastor@x.test");
-  await request.get("http://127.0.0.1:54421/test/pastor?email=pastor@x.test");
+  await request.get("http://127.0.0.1:54421/test/superadmin?email=pastor@x.test");
   ann = await open(browser);
   ben = await open(browser);
   await signUp(ann, "ann@x.test");
@@ -316,10 +316,32 @@ test("attendance, children and giving", async () => {
 });
 
 test("admin role: manages people but can't approve or see care notes", async () => {
-  await pastor.goto("/admin/members");
-  await pastor.getByRole("button", { name: "이벤" }).click();
-  await pastor.getByLabel(/권한/).last().selectOption("admin");
-  await save(pastor);
+  await pastor.goto("/admin/access");
+  const people = pastor.getByRole("list", { name: "권한이 있는 사람" });
+  const give = async (role: string) => {
+    await pastor.getByRole("button", { name: "권한 주기" }).click();
+    await pastor.getByLabel("이름 *").selectOption({ label: "이벤" });
+    await pastor.getByLabel("권한 *").selectOption(role);
+    if (role === "superadmin") await shot(pastor, "access-sheet-desk");
+    await save(pastor);
+    await expect(people.getByRole("listitem").filter({ hasText: "이벤" })).toBeVisible();
+  };
+  // Handing the church over: a second super admin, then back down to regular pastor and admin.
+  await give("superadmin");
+  await ben.goto("/admin/access");
+  await expect(ben.getByRole("button", { name: "권한 주기" })).toBeVisible();
+  await shot(ben, "access-phone");
+  for (const role of ["pastor", "member"]) {
+    await people.getByRole("listitem").filter({ hasText: "이벤" }).getByRole("button", { name: "변경" }).click();
+    await pastor.getByLabel("권한 *").selectOption(role);
+    await save(pastor);
+    await expect(pastor.getByRole("dialog")).toHaveCount(0);
+  }
+  await expect(people.getByText("이벤")).toHaveCount(0);
+  await give("admin");
+  await shot(pastor, "access-desk");
+  await ben.goto("/admin/access");
+  await expect(ben.getByText("최고 관리자만 볼 수 있습니다.")).toBeVisible();
   await ben.goto("/admin/members");
   await ben.getByRole("button", { name: "박안나" }).click();
   await expect(ben.getByRole("dialog")).toBeVisible();
@@ -328,7 +350,7 @@ test("admin role: manages people but can't approve or see care notes", async () 
   await ben.keyboard.press("Escape");
   await shot(ben, "members-phone");
   await ben.goto("/admin/log");
-  await expect(ben.getByText("목사님만 볼 수 있습니다.")).toBeVisible();
+  await expect(ben.getByText("최고 관리자만 볼 수 있습니다.")).toBeVisible();
 });
 
 test("command menu, English, phone menu", async () => {

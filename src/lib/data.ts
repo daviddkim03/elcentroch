@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useLang } from "./i18n";
 import { supabase } from "./supabase";
+import type { Role } from "./types";
 
 type Result<T> = PromiseLike<{ data: unknown; error: { message: string } | null }> & { __t?: T };
 
@@ -46,12 +47,12 @@ const messages: [RegExp, string, string][] = [
   [/rsvp closed/i, "신청이 마감되었습니다.", "Sign-up is closed."],
   [/wrong pickup code/i, "픽업 코드가 맞지 않습니다.", "That pickup code is not right."],
   [/slot unavailable/i, "이미 다른 분이 맡았습니다.", "Someone else already took this."],
-  [/at least one pastor/i, "목사 계정이 최소 하나는 있어야 합니다.", "At least one pastor account is required."],
+  [/at least one super admin/i, "최고 관리자가 최소 한 명은 있어야 합니다.", "At least one super admin is required."],
   [/not in a group/i, "아직 소그룹이 없습니다.", "You are not in a small group yet."],
   [/already has an account/i, "이미 계정이 연결된 기록입니다.", "That record already has an account."],
   [/giving_member_id/i, "헌금 기록이 있어 삭제할 수 없습니다. 비활성으로 바꿔 주세요.", "This person has giving records. Set them inactive instead."],
   [/duplicate key/i, "이미 등록되어 있습니다.", "That already exists."],
-  [/only the pastor|staff only|not allowed|row-level security/i, "권한이 없습니다.", "You do not have permission."],
+  [/super admin only|staff only|not allowed|row-level security/i, "권한이 없습니다.", "You do not have permission."],
   [/password/i, "비밀번호는 8자 이상으로 해 주세요.", "Use a password of at least 8 characters."],
 ];
 
@@ -97,6 +98,14 @@ export function useUndoDelete() {
     [t, act]
   );
 }
+
+/** The four access levels, highest first. */
+export const roleNames: Record<Role, [ko: string, en: string]> = {
+  superadmin: ["최고 관리자", "Super admin"],
+  pastor: ["목사", "Pastor"],
+  admin: ["관리자", "Admin"],
+  member: ["교인", "Member"],
+};
 
 /** Korean alphabetical order, independent of the database's collation. */
 export const byName = <T extends { name_ko: string }>(rows: T[] | undefined) =>

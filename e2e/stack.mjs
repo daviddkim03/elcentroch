@@ -102,8 +102,8 @@ http.createServer((req, res) => {
     const json = (o, s = 200) => res.writeHead(s, { ...cors, "content-type": "application/json" }).end(JSON.stringify(o));
     try {
       if (req.url === "/health") return json({ ok: true });
-      if (req.url.startsWith("/test/pastor")) {
-        await sql.query("select private.make_pastor($1, $2)", [new URL(req.url, "http://x").searchParams.get("email"), "김요셉"]);
+      if (req.url.startsWith("/test/superadmin")) {
+        await sql.query("select private.make_superadmin($1, $2)", [new URL(req.url, "http://x").searchParams.get("email"), "김요셉"]);
         return json({});
       }
       if (req.url.startsWith("/test/link")) {

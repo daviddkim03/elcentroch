@@ -19,7 +19,7 @@ export function CareNotes({ member }: { member: Member }) {
     <section className="mt-10 border-t pt-8">
       <h2 className="text-lg font-bold">{t("돌봄 기록", "Care notes")}</h2>
       <p className="mt-1 mb-4 text-sm text-muted-foreground">
-        {t("목사님만 볼 수 있고, 열람이 기록됩니다.", "Pastor only. Each viewing is logged.")}
+        {t("최고 관리자만 볼 수 있고, 열람이 기록됩니다.", "Super admins only. Each viewing is logged.")}
       </p>
       {open ? <Notes member={member} /> : <Button variant="outline" onClick={() => setOpen(true)}>{t("열기", "Open")}</Button>}
     </section>

@@ -12,7 +12,7 @@ type Auth = {
   failed: boolean;
   active: boolean;
   isStaff: boolean;
-  isPastor: boolean;
+  isSuper: boolean;
   refresh: () => Promise<void>;
   signOut: () => Promise<void>;
 };
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         failed,
         active,
         isStaff: active && member.role !== "member",
-        isPastor: active && member.role === "pastor",
+        isSuper: active && member.role === "superadmin",
         refresh,
         signOut: async () => {
           await supabase?.auth.signOut();

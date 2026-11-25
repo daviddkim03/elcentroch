@@ -15,11 +15,11 @@ type Reminder = { id: string; member_id: string; name: string; kind: string; rem
 export function Dashboard() {
   const { t } = useLang();
   const f = useFormat();
-  const { isPastor } = useAuth();
+  const { isSuper } = useAuth();
   const members = useQuery<Member[]>(() => db().from("members").select("*").order("created_at").limit(2000));
   const visits = useQuery<Visit[]>(() => db().from("visits").select("*").eq("handled", false).order("created_at", { ascending: false }).limit(20));
   const absent = useQuery<{ id: string; name: string; last_seen: string }[]>(() => db().rpc("absentees"));
-  const care = useQuery<Reminder[]>(() => db().rpc("care_reminders"), [], isPastor);
+  const care = useQuery<Reminder[]>(() => db().rpc("care_reminders"), [], isSuper);
   const pick = (fn: (m: Member) => boolean) => ({ ...members, data: members.data?.filter(fn) });
   const pending = pick((m) => m.status === "pending");
   const newcomers = pick((m) => m.status === "active" && m.is_newcomer);
@@ -33,7 +33,7 @@ export function Dashboard() {
           {(d) => (
             <ul className="divide-y border bg-card">
               {d.map((m) => (
-                <PendingRow key={m.id} m={m} records={members.data!.filter((x) => !x.user_id && x.status !== "pending")} canApprove={isPastor} onDone={members.reload} />
+                <PendingRow key={m.id} m={m} records={members.data!.filter((x) => !x.user_id && x.status !== "pending")} canApprove={isSuper} onDone={members.reload} />
               ))}
             </ul>
           )}
@@ -52,7 +52,7 @@ export function Dashboard() {
         <Section title={t("최근 3번 예배에 결석", "Missed the last 3 services")}>
           <People q={absent} empty={t("없습니다.", "No one.")} sub={(a) => `${t("마지막 출석", "Last seen")} ${f.day(a.last_seen)}`} />
         </Section>
-        {isPastor && (
+        {isSuper && (
           <Section title={t("돌봄 알림", "Care reminders")}>
             <People q={care} empty={t("예정된 알림이 없습니다.", "No reminders.")} sub={(c) => f.day(c.remind_on)} />
           </Section>
@@ -148,7 +148,7 @@ function PendingRow({ m, records, canApprove, onDone }: { m: Member; records: Me
             </Button>
           </div>
         ) : (
-          <span className="text-sm text-muted-foreground">{t("목사님 승인 필요", "Needs the pastor")}</span>
+          <span className="text-sm text-muted-foreground">{t("최고 관리자 승인 필요", "Needs a super admin")}</span>
         )}
       </div>
     </li>

@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Sheet } from "@/components/ui/sheet";
 import { useAuth } from "@/lib/auth";
-import { byName, db, useAct, useQuery } from "@/lib/data";
+import { byName, db, roleNames, useAct, useQuery } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import type { Group, Household, Member } from "@/lib/types";
 import { CareNotes } from "./care-notes";
@@ -25,7 +25,7 @@ const none: Member[] = [];
 export function MembersPage() {
   const { t } = useLang();
   const act = useAct();
-  const { isPastor, member: me } = useAuth();
+  const { isSuper, member: me } = useAuth();
   const members = useQuery<Member[]>(() => db().from("members").select("*").order("name_ko").limit(2000));
   const groups = useQuery<Group[]>(() => db().from("groups").select("*").order("name_ko"));
   const households = useQuery<Household[]>(() => db().from("households").select("*").order("name"));
@@ -39,7 +39,6 @@ export function MembersPage() {
     () => ({ active: t("활동", "Active"), pending: t("승인 대기", "Pending"), inactive: t("비활동", "Inactive"), declined: t("거절됨", "Declined") }),
     [t]
   );
-  const roleName = useMemo(() => ({ pastor: t("목사", "Pastor"), admin: t("관리자", "Admin"), member: t("교인", "Member") }), [t]);
   const groupName = (id: string | null) => {
     const g = groups.data?.find((x) => x.id === id);
     return g ? t(g.name_ko, g.name_en ?? g.name_ko) : "";
@@ -65,7 +64,7 @@ export function MembersPage() {
       col.accessor("phone", { header: t("전화", "Phone"), cell: (c) => <span className="tabular-nums">{c.getValue()}</span> }),
       col.accessor("role", {
         header: t("권한", "Role"),
-        cell: (c) => (c.getValue() === "member" ? (c.row.original.user_id ? roleName.member : t("계정 없음", "No account")) : <Badge>{roleName[c.row.original.role]}</Badge>),
+        cell: (c) => (c.getValue() === "member" ? (c.row.original.user_id ? t(...roleNames.member) : t("계정 없음", "No account")) : <Badge>{t(...roleNames[c.row.original.role])}</Badge>),
       }),
       col.accessor("status", {
         header: t("상태", "Status"),
@@ -102,19 +101,14 @@ export function MembersPage() {
     { name: "household_id", ko: "가정", en: "Household", type: "select", options: households.data?.map((h) => ({ value: h.id, label: h.name })) },
     { name: "is_newcomer", ko: "새가족", en: "Newcomer", type: "checkbox", default: true },
   ];
-  // Pending requests are approved from the dashboard; roles need an account.
-  if (isPastor && editing && editing !== "new" && editing.id !== me!.id && editing.status !== "pending") {
+  // Pending requests are approved from the dashboard; roles are set on the access page.
+  if (isSuper && editing && editing !== "new" && editing.id !== me!.id && editing.status !== "pending") {
     fields.push({
       name: "status", ko: "상태", en: "Status", type: "select", required: true, half: true,
       options: (["active", "inactive", "declined"] as const)
         .filter((s) => s !== "declined" || editing.status === "declined")
         .map((value) => ({ value, label: statusName[value] })),
     });
-    if (editing.user_id)
-      fields.push({
-        name: "role", ko: "권한", en: "Role", type: "select", required: true, half: true,
-        options: (["member", "admin", "pastor"] as const).map((value) => ({ value, label: roleName[value] })),
-      });
   }
 
   return (
@@ -194,7 +188,7 @@ export function MembersPage() {
                 }
               }}
             />
-            {isPastor && editing !== "new" && <CareNotes member={editing} />}
+            {isSuper && editing !== "new" && <CareNotes member={editing} />}
           </>
         )}
       </Sheet>

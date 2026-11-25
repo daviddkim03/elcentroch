@@ -18,14 +18,14 @@ export function PrayerPage() {
   const f = useFormat();
   const act = useAct();
   const undoDelete = useUndoDelete();
-  const { member, isPastor } = useAuth();
+  const { member, isSuper } = useAuth();
   const [open, setOpen] = useState(false);
   const q = useQuery<Prayer[]>(() =>
     db().from("prayers").select("*, prayer_supports(member_id)").order("created_at", { ascending: false }).limit(100)
   );
   const me = member!.id;
   const who = {
-    pastor: t("목사님께만", "Pastor only"),
+    pastor: t("담임목사님께만", "Senior pastor only"),
     group: t("소그룹", "My group"),
     church: t("온 교회", "Whole church"),
   };
@@ -85,7 +85,7 @@ export function PrayerPage() {
                         {p.answered ? t("응답 표시 취소", "Not answered yet") : t("응답받았어요", "Mark answered")}
                       </Button>
                     )}
-                    {(p.author_id === me || isPastor) && (
+                    {(p.author_id === me || isSuper) && (
                       <Button
                         variant="ghost"
                         className="ml-auto size-11"
@@ -122,7 +122,7 @@ export function PrayerPage() {
               options: (["church", "group", "pastor"] as const)
                 .filter((v) => v !== "group" || member!.group_id)
                 .map((value) => ({ value, label: who[value] })),
-              hint: t("담임목사님은 모든 기도 제목을 보실 수 있습니다.", "The pastor can see every request."),
+              hint: t("담임목사님과 사이트 최고 관리자는 모든 기도 제목을 볼 수 있습니다.", "The senior pastor and the site's super admins can see every request."),
             },
           ]}
           submitLabel={t("나누기", "Share")}
