@@ -1,8 +1,8 @@
 # El Centro Korean Church website
 
-Design carried over from the original Lovable site: the navy + gold colors, fonts, layout, copy, 한국어 / EN toggle, hero slider,
+Design carried over from the original site: the navy + gold colors, fonts, layout, copy, 한국어 / EN toggle, hero slider,
 404 page and the slide manager. On top of it: Plan a Visit, sermons, and a member portal with
-login, approved by the pastor.
+login, approved by a super admin (the senior pastor).
 
 Stack: Next.js 15 (App Router, static export), React 19, Tailwind CSS v4,
 shadcn/ui components, lucide-react icons (react-icons for the YouTube logo), sonner toasts,
@@ -53,11 +53,12 @@ On since November 2026. To hide it, set `NEXT_PUBLIC_MEMBER_PORTAL` to `off`. To
 1. `npx supabase link`, then `npx supabase db push --remote`. Each migration applies as a whole or
    not at all.
 2. Set the login URLs and password length with `npx supabase config push` (`supabase/config.toml`).
-3. Supabase > Authentication > SMTP: add your own mail server. The built-in one is
-   only for testing.
+3. Supabase > Authentication > SMTP: add your own mail server. The built-in one only reaches
+   addresses on the Supabase team.
 4. Change `NEXT_PUBLIC_MEMBER_PORTAL` in `.env` to `on` and push.
-5. The pastor creates an account at `/login/`, confirms the email, then you run once in the SQL
-   Editor: `select private.make_pastor('pastor@email', '김요셉');`
+5. The first super admin creates an account at `/login/`, confirms the email, then you run once in
+   the SQL Editor: `select private.make_superadmin('you@email', 'Name');`. After that, super admins
+   give out roles in the portal under Admin > Access.
 
 Optional: turn on Google or Kakao under Authentication > Providers; their buttons then appear by
 themselves. For emails to the pastor (new request) and member (approved): deploy
@@ -65,7 +66,7 @@ themselves. For emails to the pastor (new request) and member (approved): deploy
 `RESEND_API_KEY`, `MAIL_FROM`, `PASTOR_EMAIL` and `SITE_URL`, and add a Database Webhook on
 `members` (insert, update) to it with header `x-webhook-secret`.
 
-| | Pastor | Admin | Group leader | Member | Pending |
+| | Super admin | Pastor, Admin | Group leader | Member | Pending |
 |---|---|---|---|---|---|
 | Approve people, set roles, access log | yes | | | | |
 | Care notes | yes (logged) | | | | |
@@ -100,6 +101,7 @@ portal in a browser against a local Postgres, Supabase Auth and PostgREST (Linux
   (book-open, heart, map-pin, phone, sprout, trash-2).
 - Fonts are self-hosted from `@fontsource-variable/noto-sans-kr` and `noto-serif-kr`, the same
   variable font files Google Fonts serves to the original.
-- The social preview image (`og:image` in `src/lib/metadata.ts`) is still hosted by Lovable.
+- Logo: `src/components/logo-mark.tsx`, `public/icon.svg` and the files made from it (`favicon.ico`,
+  `apple-touch-icon.png`, `images/social.png`).
 - The home page shows the newest YouTube upload. Its logo comes from react-icons because lucide
   has no brand logos.

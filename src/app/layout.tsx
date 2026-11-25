@@ -17,7 +17,13 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "엘센트로 한인교회 | El Centro Korean Church",
   description: "캘리포니아 엘센트로에 위치한 한인교회입니다. 주일예배 오전 9시.",
-  icons: { icon: { url: withBasePath("/favicon.ico"), type: "image/x-icon" } },
+  icons: {
+    icon: [
+      { url: withBasePath("/favicon.ico"), sizes: "48x48" },
+      { url: withBasePath("/icon.svg"), type: "image/svg+xml" },
+    ],
+    apple: withBasePath("/apple-touch-icon.png"),
+  },
   openGraph: { type: "website", images: [ogImage] },
   twitter: { card: "summary_large_image", images: [ogImage] },
 };

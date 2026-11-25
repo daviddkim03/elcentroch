@@ -8,6 +8,7 @@ import { nav, site } from "@/lib/site";
 import { portalOn } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import { LangToggle } from "./lang-toggle";
+import { LogoMark } from "./logo-mark";
 import { NavLink } from "./nav-link";
 
 export function SiteHeader({ transparent }: { transparent?: boolean }) {
@@ -40,17 +41,13 @@ export function SiteHeader({ transparent }: { transparent?: boolean }) {
       )}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <NavLink href="/" className="flex flex-col leading-tight">
-          <span className="font-serif text-xl font-bold">
-            {t(site.nameKo, site.nameEn)}
-          </span>
-          <span
-            className={cn(
-              "text-[10px] tracking-[0.25em] uppercase",
-              light ? "opacity-80" : "text-muted-foreground"
-            )}
-          >
-            {t(site.nameEn, site.nameKo)}
+        <NavLink href="/" className="flex items-center gap-2.5 sm:gap-3">
+          <LogoMark className="size-8 sm:size-9 shrink-0 text-gold" />
+          <span className="flex flex-col leading-tight">
+            <span className="font-serif text-base leading-tight font-bold text-balance sm:text-xl">{t(site.nameKo, site.nameEn)}</span>
+            <span className={cn("hidden text-[10px] tracking-[0.25em] uppercase sm:block", light ? "opacity-80" : "text-muted-foreground")}>
+              {t(site.nameEn, site.nameKo)}
+            </span>
           </span>
         </NavLink>
         <nav className="hidden items-center gap-7 xl:flex">

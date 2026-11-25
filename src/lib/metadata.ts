@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 
-// The social preview image configured in the Lovable project (hosted on Lovable's CDN).
-export const ogImage =
-  "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/lovp_15f5vfv3tn8cjb68fwj6c9nz8c/c02c6834fe328c2f88c0df10c0b83d8b_1793559221530.png";
+// Social sites need a full address. The site is served from here on GitHub Pages.
+export const ogImage = "https://daviddkim03.github.io/elcentroch/images/social.png";
 
 /**
  * The tags the original sets on each page. A page's `openGraph` / `twitter`
